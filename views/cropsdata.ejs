@@ -1,0 +1,35 @@
+<%- layout("/layouts/boierplate") %>  
+<body>
+    
+
+    <div class="container">
+        <h1>Vegetables Information</h1>
+        <div class="crops-grid">
+            <% let vegetables = [
+                {name: 'Carrot', img: 'https://media.istockphoto.com/id/1432845374/photo/carrots.webp?a=1&b=1&s=612x612&w=0&k=20&c=VmTtnfm7CofXrr3ojPVdQHEz5yw5OOH5BOaQYUx_fZo=', desc: 'Carrots are rich in beta carotene, fiber, and vitamins.'},
+                {name: 'Radish', img: 'https://media.istockphoto.com/id/475422777/photo/daikon-radishes-for-sale-at-an-outdoor-market.jpg?s=612x612&w=0&k=20&c=sdOxzLo3GnRZK6Sbj5RsGQRRfida7GLjvQ3TmbEwLyI=', desc: 'Radishes are root vegetables known for their sharp flavor.'},
+                {name: 'Tomato', img: 'https://media.istockphoto.com/id/527655481/photo/tomato-tamoto.webp?a=1&b=1&s=612x612&w=0&k=20&c=Ago8tHfxXYhe8GMrNtaylrxWBi7lhjKzgwtHNFz7JPs=', desc: 'Tomatoes are a rich source of vitamins and antioxidants.'},
+                {name: 'Potato', img: 'https://media.istockphoto.com/id/675072230/photo/potato.webp?a=1&b=1&s=612x612&w=0&k=20&c=8Jh9fdsUb2hEw1l-iQaB9jeTDz_ApSmesZAUeHSxdKI=', desc: 'Potatoes are a staple food, providing carbohydrates and fiber.'},
+                {name: 'Ginger', img: 'https://media.istockphoto.com/id/151529399/photo/ginger.webp?a=1&b=1&s=612x612&w=0&k=20&c=Bp5sAnaUizQSVF90_seWOA_V_Dz7QCvAFi83WFls5GU=', desc: 'Ginger is used for its flavor and medicinal properties.'},
+                {name: 'Garlic', img: 'https://media.istockphoto.com/id/1412223340/photo/group-of-raw-organic-garlic-bulbs-in-a-bowl-on-sackcloth-allium-sativum-useful-as-a.webp?a=1&b=1&s=612x612&w=0&k=20&c=n23a4_0Qyh5JmBdvdzIvuM__OLn0bhwESsGX4sjhdRM=', desc: 'Garlic has strong medicinal properties and is rich in sulfur compounds.'},
+                {name: 'Spring Onion', img: 'https://media.istockphoto.com/id/1220402559/photo/spring-onions-on-a-tray-directly-above-photo.webp?a=1&b=1&s=612x612&w=0&k=20&c=MDbShbpPZUcFzLMO_6DBCE-VNBzp56zYX4yR369mzUI=', desc: 'Spring onions are mild, young onions used in various dishes.'},
+                {name: 'Guar', img: 'https://media.istockphoto.com/id/1266547477/photo/guar-or-cluster-bean-on-white-background.webp?a=1&b=1&s=612x612&w=0&k=20&c=ex0Ae2wvXevFG59QjyvlZwH6LZipT00yNpVyOQzUAvE=', desc: 'Guar beans are commonly used in Indian cuisine and farming.'},
+                {name: 'Lady Finger', img: 'https://media.istockphoto.com/id/1260060960/photo/fresh-vegetables-ladyfinger-in-the-market.jpg?s=612x612&w=0&k=20&c=C4DsuqOtbOY6lVpTsrM_4d3tBCo1Y5Cpx7XBLOIJdHY=', desc: 'Ladyfingers, also known as okra, are high in fiber and vitamins.'},
+                {name: 'Peas', img: 'https://media.istockphoto.com/id/692622154/photo/green-peas.webp?a=1&b=1&s=612x612&w=0&k=20&c=m_atHhq1eBsrnARrjYU1VMxjPjvXpCUF8C9nkyzbKbY=', desc: 'Peas are sweet legumes rich in fiber, protein, and vitamins.'},
+                {name: 'onion', img:'https://media.istockphoto.com/id/1008443606/photo/red-onions.webp?a=1&b=1&s=612x612&w=0&k=20&c=3jQW5Xy_ZRdTy3rO-M_wx7Bd0EdrbHIgKAxMH_-Gftk=',desc:'Onions are widely used across the world for their strong flavor and medicinal properties. They are rich in vitamins, antioxidants, and sulfur compounds.'}
+            
+            ]; %>
+            
+            
+            <% vegetables.forEach(function(veg) { %>
+               <a href="crops-individual" style="text-decoration: none;">
+                <div class="crop-card">
+                    <img src="<%= veg.img %>" alt="<%= veg.name %>">
+                    <h3><%= veg.name %></h3>
+                    <p><%= veg.desc %></p>
+                </div>
+               </a>
+            <% }); %>
+        </div>
+    </div>
+</body>

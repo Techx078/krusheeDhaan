@@ -1,0 +1,211 @@
+
+
+<%- layout("/layouts/boierplate") %>  
+<body>
+    <div class="container mt-5 form-container">  
+        <h2>Add Crop Details</h2>  
+        <form action="/crops/crope-add" method="POST" enctype="multipart/form-data">  
+           
+            <!-- Commodity -->
+            <div class="mb-3 position-relative">  
+                <label for="commodity" class="form-label">Commodity</label>  
+                <input type="text" id="commodity" name="Crope[commodityName]" placeholder="Search commodities..." oninput="filterCommodities()" onblur="validateCommodity()" autocomplete="off" required>
+                <div id="commoditySuggestions" class="dropdown-suggestions"></div>
+            </div>
+
+            <!-- Crop Name -->
+            <div class="mb-3">  
+                <label for="cropName" class="form-label">Crop Name</label>  
+                <select id="cropName" name="Crope[cropName]" class="form-select" required disabled>
+                    <option value="">Select a crop...</option>
+                </select>
+            </div>
+
+            <!-- Price -->
+            <div class="mb-3">  
+                <label for="price" class="form-label">Price (&#8377;)</label>  
+                <input type="number" class="form-control" id="price" name="Crope[price]" placeholder="Enter price" min="0" step="0.01" required>  
+            </div>  
+
+            <!-- Crop Description -->
+            <div class="mb-3">  
+                <label for="cropeDesc" class="form-label">Crop Description</label>  
+                <textarea class="form-control" id="cropeDesc" name="Crope[CropeDesc]" rows="3" placeholder="Description will be added soon"></textarea>  
+            </div>  
+
+            <!-- Crop Image -->
+            <div class="mb-3">  
+                <label for="cropeImage" class="form-label">Crop Image</label>  
+                <input type="file" class="form-control" id="cropeImage" name="Crope[CropeImage]" accept="image/*">  
+            </div>  
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Submit</button>  
+        </form>  
+    </div>  
+
+    <!-- JavaScript for Dropdown Suggestions -->
+    <script>
+       const cropsByCommodity = {
+             "Vegetables": [
+               "Spinach", "Fenugreek", "Mustard Greens", "Amaranthus", "Coriander",  
+               "Lettuce", "Curry Leaves", "Tomato", "Brinjal", "Ladyfinger",  
+               "Capsicum", "Chilli", "Cucumber", "Bottle Gourd", "Bitter Gourd",  
+               "Ridge Gourd", "Snake Gourd", "Pumpkin", "Ash Gourd", "Watermelon",  
+               "Musk Melon", "Carrot", "Beetroot", "Radish", "Turnip",  
+               "Sweet Potato", "Taro Root", "Yam", "Potato", "Onion",  
+               "Garlic", "Ginger", "Green Peas", "French Beans", "Cowpea",  
+               "Cluster Beans", "Broad Beans", "Cabbage", "Cauliflower", "Broccoli",  
+               "Brussels Sprouts", "Drumstick", "Jackfruit", "Indian Squash", "પાલક", "મીઠી", "સરસો પત્તા", "ચૌલાઈ", "ધાણા",  
+               "લેટસ", "કઢી પત્તા", "ટમેટાં", "બેંજન", "ભિંડો",  
+               "શિમલામિર્ચ", "લાલ મરચું", "કાકડી", "ભીંડો", "કોરો ગુલબાબી",  
+               "કિલો", "ઘીંગલો", "હલવો", "સાથે ગોઠવું", "પટાકો",
+               "કેરોટ", "ચીલા", "મૂળાં", "શલગમ", "મીઠી બટેટી",
+               "કનકોટી", "શાકરકાંડી", "તમલુ", "આલૂ", "દાંડી",
+               "લસણ", "આદૂ", "પટોલા", "મગફળી", "હરબલી", "લોટા"  
+             ],
+             "Fruits": [
+               "Mango", "Banana", "Apple", "Guava", "Pineapple",  
+               "Papaya", "Pomegranate", "Watermelon", "Muskmelon", "Orange",  
+               "Sweet Lime", "Lemon", "Grapes", "Lychee", "Chikoo (Sapota)",  
+               "Jackfruit", "Custard Apple", "Plum", "Peach", "Pear",  
+               "Apricot", "Cherry", "Strawberry", "Blueberry", "Raspberry",  
+               "Fig", "Mulberry", "Jamun", "Amla (Indian Gooseberry)", "Kiwi",  
+               "Dragon Fruit", "Star Fruit", "Tamarind", "Coconut", "Date",  
+               "Ber (Indian Jujube)", "Passion Fruit", "Persimmon","કેરી", "કેળા", "સફરજન", "જામફળ", "અનાનસ",  
+               "પપૈયા", "દાડમ", "તરબૂચ", "મસ્કમેલન", "નારંગી",  
+               "મીઠો ચૂનો", "લીંબુ", "દ્રાક્ષ", "લીચી", "ચીકુ (સાપોટા)",  
+               "જેકફ્રૂટ", "કસ્ટાર્ડ એપલ", "પ્લમ", "પીચ", "પિઅર",  
+               "જરદાળુ", "ચેરી", "સ્ટ્રોબેરી", "બ્લુબેરી", "રાસ્પબેરી",  
+               "અંજીર", "શેતૂર", "જામુન", "આમલા (ભારતીય ગૂસબેરી)", "કિવી",  
+               "ડ્રેગન ફ્રુટ", "સ્ટાર ફ્રુટ", "આમલી", "નારિયેળ", "તારીખ",  
+               "બેર (ભારતીય જુજુબ)", "પેશન ફ્રુટ", "પર્સિમોન"
+             ],
+             "Grains":[
+               "Wheat", "Rice", "Maize (Corn)", "Barley", "Millet",  
+               "Sorghum (Jowar)", "Bajra (Pearl Millet)", "Ragi ",  
+               "Quinoa", "Amaranth", "Foxtail Millet", "Kodo Millet",  
+               "Little Millet", "Proso Millet", "Teff", "Oats",  
+               "Chia Seeds", "Buckwheat", "Spelt", "Farro" , 
+               "ગહું", "ચોખા", "મકાઈ (મકાઈનો કણ)", "જવ", "બાજરી",  
+               "જોજર (જવાર)", "બાજરા (Pearl Millet)", "રાગી",  
+               "ક્વિનોઆ", "ચૌલાઈ", "ફોકસ્ટેઇલ મિલેટ", "કોડો મિલેટ",  
+               "લિટલ મિલેટ", "પ્રોસો મિલેટ", "ટેફ", "ઑટસ",  
+               "ચિયા બીજ", "બકવ્હીટ", "સ્પેલ્ટ", "ફેરો"
+             ],
+             "Oilseeds":[
+               "Groundnut (Peanut)", "Sesame", "Sunflower", "Mustard",  
+               "Rapeseed", "Soybean", "Castor", "Coconut", "Linseed (Flaxseed)",  
+               "Safflower", "Niger Seed", "Cottonseed", "Palm Kernel",  
+               "Walnut", "Almond", "Pistachio", "મકાઈ (મકાઈનો કણ)", "તલ", "સૂંફ", "આલૂવો", "મસૂર",  
+               "કપાસ", "ઘઉં", "શનગા", "હરબલી", "એરિકા નટ",  
+               "ચોખા", "લસણ", "લીનસીડ (ફ્લેક્સસીડ)", "કોણો બીજ", "પાલ્મ બીજ",  
+               "શિયાની નટ", "મકાંટી", "ખોવણ"
+             ],
+             "Pulses":[
+               "Chickpea (Bengal Gram)", "Pigeon Pea (Arhar/Tur)", "Black Gram (Urad)",  
+               "Green Gram (Moong)", "Red Lentil (Masoor)", "Horse Gram (Kulthi)",  
+               "Moth Bean", "Field Pea", "Kidney Bean (Rajma)",  
+               "Black-Eyed Pea (Lobia)", "Soybean", "Broad Bean",  
+               "Lentil", "Cluster Bean", "Dry Peas", "ચણા (બેંગલ દાળ)", "પોલો દાળ", "કાળી દાળ (ઉરદ)",  
+               "હરિયાળી દાળ (મૂંગ)", "લાલ દાળ (મસૂર)", "કુલ્થિ",  
+               "મોથ બીન", "ફીલ્ડ પીસ", "કિડીની બીન (રાજમા)",  
+               "લોબિયા (લોબિયા)", "દાળ", "કલસ્ટર બીન", "ડ્રાય પીસ"
+             ],
+             "Spices":[
+               "Black Pepper", "Cardamom", "Cumin", "Coriander", "Turmeric",  
+               "Ginger", "Garlic", "Chili", "Mustard Seeds", "Fenugreek",  
+               "Fennel Seeds", "Clove", "Cinnamon", "Nutmeg", "Mace",  
+               "Saffron", "Aniseed", "Asafoetida", "Caraway Seeds",  
+               "Tamarind", "Curry Leaves", "Kalonji (Nigella)", "Bay Leaves",  
+               "Ajwain", "Tamarind", "Dry Mango Powder (Amchur)", "Allspice",  
+               "Star Anise", "Lemon Grass", "Celery Seeds", "કાળી મરી", "એલચી", "જીરુ", "ધાણા", "હળદર",  
+               "આદુ", "લસણ", "મરચા", "મૂંગફળી", "ફેનેલ",  
+               "ચણી મસાલા", "તુલસી", "કાવળો (રીંગ)", "બેકાય પત્તો",  
+               "અજમો", "હળદર પાવડર", "લીમટેલ", "જિલ્લી મીઠું", "સમય બીજ",
+             ],
+             "Cash Crops": [
+               "Cotton", "Sugarcane", "Tea", "Coffee", "Tobacco",  
+               "Rubber", "Cocoa", "Spices", "Oilseeds", "Jute",  
+               "Kesar (Saffron)", "Ginger", "Pepper", "Cardamom", "Areca Nut",  
+               "Vanilla", "Cashew Nut", "Pineapple", "Coconut", "Flowers",  
+               "Silk (Sericulture)", "Bamboo", "Betel Leaf","કપાસ", "ચોખા", "ટમેટાં", "કોફી", "ચરાવતી પોટલી",  
+               "અલ્મો", "માવડી પાંગવું", "સરકાં થકી",
+             ],
+             "Plantation Crops": [
+               "Tea", "Coffee", "Rubber", "Coconut", "Cocoa",  
+               "Areca Nut", "Oil Palm", "Spices (Cardamom, Pepper)",  
+               "Cashew Nut", "Betel Nut", "Vanilla", "Jute", "ચા", "કોફી", "રબર", "નારીયલ", "કાકવી",
+               "એરિકા નટ", "પામ ઓલ", "મસાલા (એલચી, મરી)", 
+               "કાજુ નટ", "બેટલ નટ", "વનિલા", "ઝૂટ", "Cha", "Kofi", "Rabar", "Nariyal", "Kakavi",
+               "Areca Nut", "Palm Oil", "Masala (Elchi, Mari)", 
+               "Kaju Nut", "Betel Nut", "Vanilla", "Jute"
+             ]
+         };
+
+        const commodities = Object.keys(cropsByCommodity);
+
+        function filterCommodities() {
+            const input = document.getElementById("commodity").value.toLowerCase();
+            const suggestionsContainer = document.getElementById("commoditySuggestions");
+            suggestionsContainer.innerHTML = ""; // Clear previous suggestions
+
+            if (input) {
+                const filtered = commodities.filter(item => item.toLowerCase().includes(input));
+                if (filtered.length) {
+                    suggestionsContainer.style.display = "block";
+                    filtered.forEach(item => {
+                        const suggestion = document.createElement("div");
+                        suggestion.textContent = item;
+                        suggestion.onclick = () => selectCommodity(item);
+                        suggestionsContainer.appendChild(suggestion);
+                    });
+                } else {
+                    suggestionsContainer.style.display = "none";
+                }
+            } else {
+                suggestionsContainer.style.display = "none";
+            }
+        }
+
+        function selectCommodity(value) {
+            document.getElementById("commodity").value = value;
+            document.getElementById("commoditySuggestions").style.display = "none";
+            populateCropDropdown(value);
+        }
+
+        function validateCommodity() {
+            const input = document.getElementById("commodity").value;
+            if (!commodities.includes(input)) {
+                alert("Invalid commodity! Please select a commodity from the suggestions.");
+                document.getElementById("commodity").value = "";
+                document.getElementById("cropName").innerHTML = "<option value=''>Select a crop...</option>";
+                document.getElementById("cropName").disabled = true;
+            }
+        }
+
+        function populateCropDropdown(commodity) {
+            const cropDropdown = document.getElementById("cropName");
+            cropDropdown.innerHTML = "<option value=''>Select a crop...</option>";
+            const crops = cropsByCommodity[commodity] || [];
+            crops.forEach(crop => {
+                const option = document.createElement("option");
+                option.value = crop;
+                option.textContent = crop;
+                cropDropdown.appendChild(option);
+            });
+            cropDropdown.disabled = crops.length === 0;
+        }
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(event) {
+            const suggestions = document.getElementById('commoditySuggestions');
+            const commodityInput = document.getElementById('commodity');
+            if (!suggestions.contains(event.target) && event.target !== commodityInput) {
+                suggestions.style.display = 'none';
+            }
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>  
+</body>  
+

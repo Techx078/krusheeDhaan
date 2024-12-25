@@ -1,0 +1,35 @@
+<%- layout("/layouts/boierplate") %> 
+<body>  
+    <div class="container mt-5">  
+        <h2>Add Crop Details</h2>  
+        <form action="/crops/crope-add/<%= newCrops._id %>?_method=PUT" method="POST" enctype="multipart/form-data">  
+            <div class="mb-3">  
+                <label for="type" class="form-label">Crop Type</label>  
+                <input type="text" class="form-control" id="type" name="Crope[Type]" required>  
+            </div>  
+            
+            <div class="mb-3">  
+                <label for="cropsName" class="form-label">Crops Name</label>  
+                <input type="text" class="form-control" value="newCrops.Crop[0].CropsName" id="cropsName" name="Crope[CropsName]" required>  
+            </div>  
+            
+            <div class="mb-3">  
+                <label for="price" class="form-label">Price</label>  
+                <input type="number" value="<%= newCrops.Crop[0].price%>" class="form-control" id="price" name="Crope[price]" required>  
+            </div>  
+
+            <div class="mb-3">  
+                <label for="cropeDesc" class="form-label">Crop Description</label>  
+                <textarea class="form-control"  id="cropeDesc" name="Crope[CropeDesc]" rows="3"> <%= newCrops.Crop[0].CropeDesc%></textarea>  
+            </div>  
+
+            <div class="mb-3">  
+                <label for="cropeImage"   class="form-label">Crop Image</label>  
+                <input type="file" value="newCrops.Crop[0].CropeImage.url" class="form-control" id="cropeImage" name="Crope[CropeImage]" >  
+            </div>  
+
+            
+            <button type="submit" class="btn btn-primary">Submit</button>  
+        </form>  
+    </div>     
+    </body>

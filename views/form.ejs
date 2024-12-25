@@ -1,0 +1,403 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Farmer Registration</title>  
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">  
+    
+    <style>
+        /* Body Styling */
+        body{
+            background-image: linear-gradient(90deg, rgb(84, 103, 88), rgb(46, 76, 61), rgb(174, 239, 204), rgb(174, 239, 204), rgb(1, 44, 1)) !important;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Form Container Styling */
+        .container {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        /* Dropdown and Suggestions Styling */
+        .dropdown-container {
+            position: relative;
+            width: 100%;
+        }
+        .dropdown-suggestions {
+            border: 1px solid #ccc;
+            border-top: none;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #fff;
+            position: absolute;
+            width: 100%;
+            display: none;
+            z-index: 10;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 5px 5px;
+        }
+        .dropdown-suggestions div {
+            padding: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+        }
+        .dropdown-suggestions div:hover {
+            background: #007bff;
+            color: #fff;
+        }
+
+        /* Error Message Styling */
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>  
+<body>  
+
+<div class="container mt-5">  
+    <h2 class="text-center mb-4">Farmer Registration Form</h2>  
+    <form id="farmerForm" method="POST" action="/farmers/addFarmerData" enctype="multipart/form-data" novalidate> 
+        <!-- username -->
+        <div class="mb-3">
+            <label style="color: brown;" for="username" class="form-label">UserName:*</label>
+            <input type="username" name="username" class="form-control" required id="username">
+           
+        </div>
+       
+        <!-- password -->
+        <div class="mb-3">
+            <label style="color: brown;" for="password" class="form-label">password*</label>
+            <input id="password" type="password" name="password" class="form-control" required >
+        </div> 
+        <!-- Full Name -->
+        <div class="form-group"> 
+            <label for="fullName">Full Name</label>  
+            <input type="text" class="form-control" id="fullName" required name="farmer[FullName]">  
+            <span id="fullName-error" class="error">Please enter your full name.</span>
+        </div>  
+
+        <!-- Email -->
+        <div class="form-group">  
+            <label for="email">Email</label>  
+            <input type="email" class="form-control" id="email" required name="farmer[Email]">  
+            <span id="email-error" class="error">Please enter a valid email address.</span>
+        </div>  
+
+        <!-- Mobile Number -->
+        <div class="form-group">  
+            <label for="mobileNumber">Mobile Number</label>  
+            <input type="number" class="form-control" id="mobileNumber" name="farmer[MobileNumber]" required pattern="\d{10}">
+            <span id="mobile-error" class="error">Please enter a valid 10-digit mobile number.</span>
+        </div> 
+
+        <!-- Profile Image -->
+        <div class="form-group">  
+            
+            <label for="image">Profile Image</label>  
+            <input type="file" class="form-control" id="image" name="farmer[ProfileImage]" accept="image/*" required>  
+            <span id="image-error" class="error">Please upload a profile image.</span>
+        </div> 
+
+        <!-- Address -->
+        <div class="form-group">  
+            <label>Address</label>  
+            <div class="form-row">
+                <!-- State -->
+                <div class="col-md-4 mb-3">
+                    <input type="text" class="form-control" value="gujrat" placeholder="State" id="state" name="farmer[State]" required>
+                    <span id="state-error" class="error">Please enter your state.</span>
+                </div>
+                <!-- District -->
+                <div class="col-md-4 mb-3">
+                    <label for="district" class="sr-only">District</label>
+                    <div class="dropdown-container">
+                        <input type="text" name="farmer[District]" id="district" class="form-control" placeholder="District" autocomplete="off" required>
+                        <div id="district-suggestions" class="dropdown-suggestions"></div>
+                        <span id="district-error" class="error">Please enter a valid district.</span>
+                    </div>
+                </div>
+                <!-- Taluka -->
+                <div class="col-md-4 mb-3">
+                    <label for="taluka" class="sr-only">Taluka</label>
+                    <select id="taluka" class="form-control" name="farmer[Taluka]" required>
+                        <option value="">Select Taluka</option>
+                    </select>
+                    <span id="taluka-error" class="error">Please select a taluka.</span>
+                </div>
+            </div>
+        </div>  
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Submit</button>  
+    </form>  
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>  
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>  
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  
+
+<!-- District and Taluka Selector Script -->
+<script>
+    // District and Taluka Data
+    const districts = {
+        Ahmedabad: ["Ahmedabad City", "Dascroi", "Dholka", "Dhandhuka", "Bavla", "Sanand", "Viramgam", "Detroj", "Mandal"],
+        Amreli: ["Amreli", "Babra", "Bagasara", "Dhari", "Jafrabad", "Khambha", "Lathi", "Rajula", "Savarkundla"],
+        Anand: ["Anand", "Anklav", "Borsad", "Khambhat", "Petlad", "Sojitra", "Tarapur", "Umreth"],
+        Aravalli: ["Bayad", "Bhiloda", "Dhansura", "Malpur", "Meghraj", "Modasa"],
+        Banaskantha: ["Amirgadh", "Bhabhar", "Danta", "Dantiwada", "Deesa", "Dhanera", "Kankrej", "Lakhani", "Palanpur", "Tharad", "Vadgam", "Vav"],
+        Bharuch: ["Bharuch", "Amod", "Ankleshwar", "Hansot", "Jambusar", "Jhagadia", "Valia"],
+        Bhavnagar: ["Bhavnagar", "Ghogha", "Gariadhar", "Mahuva", "Palitana", "Sihor", "Talaja", "Umrala"],
+        Botad: ["Botad", "Barwala", "Gadhada", "Ranpur"],
+        "Chhota Udaipur": ["Bodeli", "Chhota Udaipur", "Jetpur Pavi", "Kavant", "Naswadi", "Sankheda"],
+        Dahod: ["Dahod", "Devgad Baria", "Fatepura", "Garbada", "Jhalod", "Limkheda", "Sanjeli"],
+        Dang: ["Ahwa", "Subir", "Waghai"],
+        "Devbhoomi Dwarka": ["Bhanvad", "Kalyanpur", "Khambhalia"],
+        Gandhinagar: ["Gandhinagar", "Kalol", "Mansa", "Dehgam"],
+        "Gir Somnath": ["Gir Gadhada", "Kodinar", "Patan Veraval", "Sutrapada", "Una"],
+        Jamnagar: ["Jamnagar", "Dhrol", "Jamjodhpur", "Jodiya", "Kalavad", "Lalpur"],
+        Junagadh: ["Junagadh", "Bhesan", "Keshod", "Malia", "Manavadar", "Mangrol", "Mendarda", "Visavadar", "Vanthali"],
+        Kheda: ["Kheda", "Balasinor", "Kapadvanj", "Kathlal", "Mahudha", "Matar", "Nadiad", "Thasra", "Vaso"],
+        Kutch: ["Bhachau", "Bhuj", "Gandhidham", "Lakhpat", "Mandvi", "Mundra", "Nakhatrana", "Rapar", "Anjar", "Abdasa"],
+        Mahisagar: ["Balasinor", "Lunawada", "Khanpur", "Kadana", "Santrampur", "Virpur"],
+        Mehsana: ["Mehsana", "Becharaji", "Jotana", "Kadi", "Kheralu", "Satlasana", "Unjha", "Vadnagar", "Visnagar"],
+        Morbi: ["Halvad", "Maliya", "Morbi", "Tankara", "Wankaner"],
+        Narmada: ["Dediapada", "Garudeshwar", "Nandod", "Sagbara"],
+        Navsari: ["Chikhli", "Gandevi", "Jalalpore", "Navsari", "Vansda"],
+        Panchmahal: ["Godhra", "Ghoghamba", "Halol", "Jambughoda", "Kalol", "Morwa Hadaf", "Shehra"],
+        Patan: ["Chanasma", "Harij", "Patan", "Radhanpur", "Sami", "Sankheshwar", "Sarasvati", "Siddhpur"],
+        Porbandar: ["Kutiyana", "Porbandar", "Ranavav"],
+        Rajkot: ["Rajkot", "Dhoraji", "Gondal", "Jasdan", "Jetpur", "Kotda Sangani", "Lodhika", "Paddhari", "Upleta", "Wankaner"],
+        Sabarkantha: ["Himatnagar", "Idar", "Khedbrahma", "Poshina", "Prantij", "Talod", "Vadali", "Vijaynagar"],
+        Surat: ["Surat City", "Bardoli", "Chorasi", "Kamrej", "Mandvi", "Mahuva", "Olpad", "Palsana", "Umarpada"],
+        Surendranagar: ["Chotila", "Dhrangadhra", "Halvad", "Lakhtar", "Limbdi", "Muli", "Sayla", "Thangadh", "Wadhwan"],
+        Tapi: ["Vyara", "Dolvan", "Kukarmunda", "Nizar", "Songadh", "Valod"],
+        Vadodara: ["Vadodara City", "Chhota Udaipur", "Dabhoi", "Karjan", "Padra", "Sankheda", "Savli", "Sinor", "Vaghodia"],
+        Valsad: ["Dharampur", "Kaprada", "Pardi", "Umbergaon", "Valsad", "Vapi"]
+    };
+
+    // Mapping Taluka to District for easy lookup
+    const talukaToDistrict = {};
+    for (const [district, talukas] of Object.entries(districts)) {
+        talukas.forEach(taluka => {
+            talukaToDistrict[taluka.toLowerCase()] = district;
+        });
+    }
+
+    // Get DOM Elements
+    const districtInput = document.getElementById("district");
+    const districtSuggestions = document.getElementById("district-suggestions");
+    const talukaSelect = document.getElementById("taluka");
+    const districtError = document.getElementById("district-error");
+    const talukaError = document.getElementById("taluka-error");
+
+    // Function to Show Suggestions for District and Taluka
+    districtInput.addEventListener("input", () => {
+        const query = districtInput.value.trim().toLowerCase();
+        districtSuggestions.innerHTML = "";
+        districtSuggestions.style.display = "none";
+        districtError.style.display = "none"; // Hide error on new input
+
+        if (query.length > 0) {
+            const matchedDistricts = Object.keys(districts).filter(district => district.toLowerCase().includes(query));
+            const matchedTalukas = Object.keys(talukaToDistrict).filter(taluka => taluka.includes(query));
+
+            // Collect suggestions without duplicates
+            const suggestions = [];
+
+            matchedDistricts.forEach(district => {
+                suggestions.push({ type: 'district', name: district });
+            });
+
+            matchedTalukas.forEach(taluka => {
+                // Capitalize first letter for display
+                const displayTaluka = taluka.charAt(0).toUpperCase() + taluka.slice(1);
+                suggestions.push({ type: 'taluka', name: displayTaluka });
+            });
+
+            // Remove duplicate suggestions
+            const uniqueSuggestions = [];
+            const seen = new Set();
+            suggestions.forEach(suggestion => {
+                const key = suggestion.type + ":" + suggestion.name;
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    uniqueSuggestions.push(suggestion);
+                }
+            });
+
+            uniqueSuggestions.forEach(suggestion => {
+                const suggestionDiv = document.createElement("div");
+                suggestionDiv.textContent = suggestion.name;
+                suggestionDiv.dataset.type = suggestion.type;
+                suggestionDiv.dataset.name = suggestion.name;
+                suggestionDiv.addEventListener("click", () => {
+                    districtInput.value = suggestion.name;
+                    districtSuggestions.style.display = "none";
+                    districtError.style.display = "none"; // Hide error on valid selection
+
+                    if (suggestion.type === 'district') {
+                        populateTalukas(suggestion.name);
+                    } else if (suggestion.type === 'taluka') {
+                        const district = talukaToDistrict[suggestion.name.toLowerCase()];
+                        if (district) {
+                            districtInput.value = district;
+                            populateTalukas(district);
+                            talukaSelect.value = suggestion.name;
+                            talukaError.style.display = "none"; // Hide error on valid selection
+                        }
+                    }
+                });
+                districtSuggestions.appendChild(suggestionDiv);
+            });
+
+            if (uniqueSuggestions.length > 0) {
+                districtSuggestions.style.display = "block";
+            }
+        } else {
+            talukaSelect.innerHTML = "<option value=''>Select Taluka</option>";
+        }
+    });
+
+    // Hide Suggestions When Clicking Outside
+    document.addEventListener("click", (event) => {
+        if (!event.target.closest('.dropdown-container')) {
+            districtSuggestions.style.display = "none";
+        }
+    });
+
+    // Populate Talukas Based on Selected District
+    function populateTalukas(district) {
+        talukaSelect.innerHTML = "<option value=''>Select Taluka</option>";
+        if (districts[district]) {
+            districts[district].forEach(taluka => {
+                const option = document.createElement("option");
+                option.value = taluka;
+                option.textContent = taluka;
+                talukaSelect.appendChild(option);
+            });
+        }
+        talukaError.style.display = "none"; // Hide taluka error on district change
+    }
+
+    // Validate District on Blur
+    districtInput.addEventListener("blur", () => {
+        const input = districtInput.value.trim().toLowerCase();
+        if (input.length > 0) {
+            const districtKey = Object.keys(districts).find(district => district.toLowerCase() === input);
+            if (districtKey) {
+                populateTalukas(districtKey);
+                districtError.style.display = "none";
+            } else {
+                talukaSelect.innerHTML = "<option value=''>Select Taluka</option>";
+                districtError.style.display = "block";
+            }
+        } else {
+            talukaSelect.innerHTML = "<option value=''>Select Taluka</option>";
+            districtError.style.display = "none";
+        }
+    });
+
+    // Validate Taluka on Change
+    talukaSelect.addEventListener("change", () => {
+        if (talukaSelect.value === "") {
+            talukaError.style.display = "block";
+        } else {
+            talukaError.style.display = "none";
+        }
+    });
+
+    // Form Validation on Submit
+    const farmerForm = document.getElementById("farmerForm");
+
+    farmerForm.addEventListener("submit", function(event) {
+        let isValid = true;
+
+        // Validate Full Name
+        const fullName = document.getElementById("fullName").value.trim();
+        const fullNameError = document.getElementById("fullName-error");
+        if (fullName === "") {
+            fullNameError.style.display = "block";
+            isValid = false;
+        } else {
+            fullNameError.style.display = "none";
+        }
+
+        // Validate Email
+        const email = document.getElementById("email").value.trim();
+        const emailError = document.getElementById("email-error");
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            emailError.style.display = "block";
+            isValid = false;
+        } else {
+            emailError.style.display = "none";
+        }
+
+        // Validate Mobile Number
+        const mobileNumber = document.getElementById("mobileNumber").value.trim();
+        const mobileError = document.getElementById("mobile-error");
+        const mobilePattern = /^\d{10}$/;
+        if (!mobilePattern.test(mobileNumber)) {
+            mobileError.style.display = "block";
+            isValid = false;
+        } else {
+            mobileError.style.display = "none";
+        }
+
+        // Validate Profile Image
+        const imageInput = document.getElementById("image");
+        const imageError = document.getElementById("image-error");
+        if (imageInput.files.length === 0) {
+            imageError.style.display = "block";
+            isValid = false;
+        } else {
+            imageError.style.display = "none";
+        }
+
+        // Validate State
+        const state = document.getElementById("state").value.trim();
+        const stateError = document.getElementById("state-error");
+        if (state === "") {
+            stateError.style.display = "block";
+            isValid = false;
+        } else {
+            stateError.style.display = "none";
+        }
+
+        // Validate District
+        const districtVal = districtInput.value.trim().toLowerCase();
+        const districtValid = Object.keys(districts).some(district => district.toLowerCase() === districtVal);
+        if (!districtValid) {
+            districtError.style.display = "block";
+            isValid = false;
+        } else {
+            districtError.style.display = "none";
+        }
+
+        // Validate Taluka
+        if (talukaSelect.value === "") {
+            talukaError.style.display = "block";
+            isValid = false;
+        } else {
+            talukaError.style.display = "none";
+        }
+
+        // Prevent Form Submission if Validation Fails
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
+</script>
+
+</body>
+</html>

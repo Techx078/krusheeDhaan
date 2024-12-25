@@ -1,0 +1,40 @@
+<%- layout("/layouts/boierplate") %> 
+<body class="d-flex justify-content-center align-items-center bg-gradient">
+
+    <!-- Farmer Image (left) -->
+    <img class="d-none d-lg-block w-auto h-64 mr-4"
+        src="/image/Indian_farmer_man_kneeling_and_holding_crop_plant_vector_image_on_VectorStock-removebg-preview.png" alt="Farmer Image">
+
+    <!-- Form Container -->
+    <div class="form-container bg-white p-4 rounded shadow-lg">
+        <h2 class="text-center mb-4 text-success">User Register</h2>
+        <form action="/users/register" method="POST">
+            <!-- Username Field -->
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" class="form-control" placeholder="xyx@123..." name="username" required />
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" class="form-control" placeholder="email" name="email" required />
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" placeholder="password" name="password" required />
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-success btn-block">Register</button>
+        </form>
+    </div>
+
+    <!-- Farmer Image (right) -->
+    <img class="d-none d-lg-block w-auto h-64 ml-4"
+        src="/image/Indian_Farmers_PNG_Picture__Cartoon_Indian_Farmer__Indian_Farmers__Cartoon__India_PNG_Image_For_Free_Download-removebg-preview.png" alt="Cartoon Farmer Image">
+
+  
+</body>

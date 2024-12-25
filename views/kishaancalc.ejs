@@ -1,0 +1,196 @@
+
+
+<%- layout("/layouts/boierplate") %>  
+<body>
+    
+    <h1 id="title" class="text-center my-5">Farmer's Benefit Calculator</h1>
+
+    <div class="container">
+        <select id="language" class="form-control mb-3" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="gu">Gujarati</option>
+        </select>
+
+        <div class="calc p-4 bg-white shadow rounded">
+            <div class="input-row mb-3">
+                <input
+                    type="number"
+                    id="price"
+                    placeholder="Price per Crop"
+                    class="form-control"
+                />
+                <select id="unit" class="form-control mt-2">
+                    <option value="kg">per kg</option>
+                    <option value="quintal">per quintal</option>
+                    <option value="tonnes">per tonnes</option>
+                </select>
+            </div>
+
+            <div class="input-row mb-3">
+                <input
+                    type="number"
+                    id="bags"
+                    placeholder="Total Number of Bags"
+                    class="form-control"
+                />
+            </div>
+
+            <div class="input-row mb-3">
+                <input
+                    type="number"
+                    id="quantityPerBag"
+                    placeholder="Quantity of Crop per Bag"
+                    class="form-control"
+                />
+                <select id="quantityUnit" class="form-control mt-2">
+                    <option value="kg">kg</option>
+                    <option value="quintal">quintal</option>
+                    <option value="tonnes">tonnes</option>
+                </select>
+            </div>
+
+            <div class="input-row mb-3">
+                <input
+                    type="number"
+                    id="additionalCosts"
+                    placeholder="Additional Costs (if any)"
+                    class="form-control"
+                />
+            </div>
+
+            <div class="input-row text-center mb-4">
+                <button class="btn btn-primary" onclick="calculateTotal()">Calculate</button>
+                <button class="btn btn-secondary ml-2" onclick="resetFields()">Reset</button>
+            </div>
+
+            <h2 id="result" class="result text-center mt-4">Total Rupees: </h2>
+        </div>
+    </div>
+  
+    <script>
+        const translations = {
+            en: {
+                title: "Farmer's Benefit Calculator",
+                pricePlaceholder: "Price per Crop",
+                bagsPlaceholder: "Total Number of Bags",
+                quantityPerBagPlaceholder: "Quantity of Crop per Bag",
+                additionalCostsPlaceholder: "Additional Costs (if any)",
+                calculateButton: "Calculate",
+                resetButton: "Reset",
+                totalLabel: "Total Rupees: "
+            },
+            hi: {
+                title: "किसान लाभ कैलकुलेटर",
+                pricePlaceholder: "फसल की कीमत",
+                bagsPlaceholder: "बाग की कुल संख्या",
+                quantityPerBagPlaceholder: "बाग में फसल की मात्रा",
+                additionalCostsPlaceholder: "अतिरिक्त लागत (यदि कोई हो)",
+                calculateButton: "गणना करें",
+                resetButton: "रीसेट करें",
+                totalLabel: "कुल रुपये: "
+            },
+            gu: {
+                title: "કિસાન લાભ કેલ્ક્યુલેટર",
+                pricePlaceholder: "ફસલની કિંમત",
+                bagsPlaceholder: "બેગની કુલ સંખ્યા",
+                quantityPerBagPlaceholder: "બેગમાં ફસલની માત્રા",
+                additionalCostsPlaceholder: "વધારાની ખર્ચ (જો હોય)",
+                calculateButton: "ગણતરી કરો",
+                resetButton: "રીસેટ કરો",
+                totalLabel: "કુલ રૂપિયા: "
+            }
+        };
+
+        function changeLanguage() {
+            const lang = document.getElementById('language').value;
+            const translation = translations[lang];
+
+            document.getElementById('title').innerText = translation.title;
+            document.getElementById('price').placeholder = translation.pricePlaceholder;
+            document.getElementById('bags').placeholder = translation.bagsPlaceholder;
+            document.getElementById('quantityPerBag').placeholder = translation.quantityPerBagPlaceholder;
+            document.getElementById('additionalCosts').placeholder = translation.additionalCostsPlaceholder;
+            document.querySelector('button:nth-of-type(1)').innerText = translation.calculateButton;
+            document.querySelector('button:nth-of-type(2)').innerText = translation.resetButton;
+            document.getElementById('result').innerText = translation.totalLabel;
+        }
+
+        function convertToKg(value, unit,qunit) {
+            if(qunit=="kg")
+           {
+            switch (unit) {
+                case 'kg':
+                    return value;
+                case 'quintal':
+                    return value / 100; // 1 quintal = 100 kg
+                case 'tonnes':
+                    return value / 1000; // 1 tonne = 1000 kg
+                default:
+                    return value;
+            }
+           } 
+           else if(qunit=="quintal")
+           {
+            switch (unit) {
+                case 'kg':
+                    return value *100;
+                case 'quintal':
+                    return value ; // 1 quintal = 100 kg
+                case 'tonnes':
+                    return value / 10; // 1 tonne = 1000 kg
+                default:
+                    return value;
+            }
+           }
+           else if(qunit=="tonnes")
+           {
+            switch (unit) {
+                case 'kg':
+                    return value*1000;
+                case 'quintal':
+                    return value * 100; // 1 quintal = 100 kg
+                case 'tonnes':
+                    return value; // 1 tonne = 1000 kg
+                default:
+                    return value;
+            }
+           }
+            
+        }
+
+        function calculateTotal() {
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const bags = parseFloat(document.getElementById('bags').value) || 0;
+            const quantityPerBag = parseFloat(document.getElementById('quantityPerBag').value) || 0;
+            const additionalCosts = parseFloat(document.getElementById('additionalCosts').value) || 0;
+
+            const priceUnit = document.getElementById('unit').value;
+            const quantityUnit = document.getElementById('quantityUnit').value;
+
+             console.log(priceUnit);
+             console.log(quantityUnit);
+
+            // Convert all quantities to kg
+            const pricePerKg = convertToKg(price, priceUnit,quantityUnit);
+            console.log(pricePerKg);
+
+            const totalQuantity = (bags * quantityPerBag);
+            console.log(totalQuantity);
+
+            
+            const total = (pricePerKg * totalQuantity) - additionalCosts; // Subtracting additional costs
+            document.getElementById('result').innerText = 'Total Rupees: ' + total.toFixed(2);
+        }
+
+        function resetFields() {
+            document.getElementById('price').value = '';
+            document.getElementById('bags').value = '';
+            document.getElementById('quantityPerBag').value = '';
+            document.getElementById('additionalCosts').value = '';
+            document.getElementById('result').innerText = 'Total Rupees: ';
+            document.getElementById('language').value = 'en'; // Reset to English
+            changeLanguage(); // Update placeholders and button text
+        }
+    </script>
+</body>

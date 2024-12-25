@@ -1,0 +1,98 @@
+<%- layout("/layouts/boierplate") %>  
+
+<body>
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+          <!-- Farmer Details -->
+          <div class="col-md-3 text-center">
+            <div class="card mb-4 bg-dark text-white">
+              <img
+                src="https://media.istockphoto.com/id/641940492/photo/rural-women-cutting-silage-for-domestic-cattle.webp?a=1&b=1&s=612x612&w=0&k=20&c=1-tgxvJwpYSuRlITlmv-6jLPb4Jiax9t0dNgd8Nqw8c="
+                alt="Farmer Image"
+                class="card-img-top rounded-circle"
+                style="width: 15vw; height: 15vw; object-fit: cover; margin-top: 15px;"
+              />
+              <div class="card-body">
+                <h5 class="card-title">Farmer Details</h5>
+                <p class="card-text">Full Name: Rajesh Kumar</p>
+                <p class="card-text">Email: rajesh.kumar@example.com</p>
+                <p class="card-text">Mobile Number: +91-9876543210</p>
+                <p class="card-text"><strong>Address:</strong></p>
+                <p class="card-text">State: Gujarat</p>
+                <p class="card-text">District: Ahmedabad</p>
+                <p class="card-text">Village: Khambhat</p>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Crop Details -->
+          <div class="col-md-9">
+            <div class="row" id="cropList">
+              <!-- Crops will be injected here by JavaScript -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+        const newCropsList = [
+          {
+            Crop: [
+              {
+                CropeImage: {
+                  url: "https://media.istockphoto.com/id/506164764/photo/tractor-spraying-soybean-field.webp?a=1&b=1&s=612x612&w=0&k=20&c=FziHcky7PA62LyCW15cUEva70DhfXUbdeNIZBi_zQlk=",
+                },
+                CropsName: "Tomato",
+                price: 50,
+                CropeDesc: "Fresh and juicy tomatoes.",
+              },
+            ],
+          },
+          {
+            Crop: [
+              {
+                CropeImage: {
+                  url: "https://media.istockphoto.com/id/1161878589/photo/bueatiful-tea-plantation-on-mountain.webp?a=1&b=1&s=612x612&w=0&k=20&c=lcce3mIinQa9DEYkamcXc4y9KN-3kDqLlwcnG2pxhss=",
+                },
+                CropsName: "Potato",
+                price: 30,
+                CropeDesc: "High-quality potatoes.",
+              },
+            ],
+          },
+          {
+            Crop: [
+              {
+                CropeImage: {
+                  url: "https://media.istockphoto.com/id/1161878589/photo/bueatiful-tea-plantation-on-mountain.webp?a=1&b=1&s=612x612&w=0&k=20&c=lcce3mIinQa9DEYkamcXc4y9KN-3kDqLlwcnG2pxhss=",
+                },
+                CropsName: "Carrot",
+                price: 40,
+                CropeDesc: "Crunchy and nutritious carrots.",
+              },
+            ],
+          },
+        ];
+  
+        const div = document.querySelector("#cropList");
+        for (newCrops of newCropsList) {
+          const divnew = `
+            <div class="col-md-4 mb-4">
+              <div class="card bg-dark text-white">
+                <img src="${newCrops.Crop[0].CropeImage.url}" class="card-img-top" alt="Crop Image">
+                <div class="card-body">
+                  <h5 class="card-title">${newCrops.Crop[0].CropsName}</h5>
+                  <p class="card-text">Price: ₹${newCrops.Crop[0].price}/kg</p>
+                  <p class="card-text">${newCrops.Crop[0].CropeDesc}</p>
+                  <div class="d-flex justify-content-between">
+                    <a href="/profile/:id/crops-edit" class="btn btn-success">Edit Details</a>
+                    <button class="btn btn-danger">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          div.innerHTML += divnew;
+        }
+      </script>  
+</body>

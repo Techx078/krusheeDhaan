@@ -1,0 +1,53 @@
+
+<%- layout("/layouts/boierplate") %>  
+
+<body>
+ 
+    
+
+    <!-- Language Selection -->
+  
+
+    <div class="container">
+        <div class="lang">
+            <label for="language">Select Language:</label>
+            <select id="language" name="language" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="gu">Gujarati</option>
+                <option value="hi">Hindi</option>
+            </select>
+        </div>
+        <!-- Form for Market Yard Data -->
+        <form action="/market/market-yard" method="POST">
+            <!-- Commodity  Dropdown -->
+            <label for="commodity">Commodity</label>
+            <select id="commodity" name="test[commodity]" required>
+                <!-- Options will be dynamically loaded based on language selection -->
+            </select><br><br>
+            <!-- state  Dropdown -->
+            <label for="state">State</label>
+            <select id="state" name="test[state]" required>
+                <!-- Options will be dynamically loaded based on language selection -->
+            </select><br><br>
+            <!-- District  Dropdown -->
+            <label for="district">District</label>
+            <select id="district" name="test[district]" required>
+                <!-- Options will be dynamically loaded based on language selection -->
+            </select><br><br>
+            <!-- Market  Dropdown -->
+            <label for="market">Market</label>
+            <select id="market" name="test[market]" required>
+                <!-- Options will be dynamically loaded based on language selection -->
+            </select><br><br>
+
+            <label for="dateFrom">Date From:</label>
+            <input class="date" type="date" id="dateFrom" name="test[dateFrom]"><br><br>
+
+            <label for="dateTo">Date To:</label>
+            <input  class="date" type="date" id="dateTo" name="test[dateTo]"><br><br>
+
+            <button type="submit">Fetch Data</button>
+        </form>
+    </div>
+    
+</body>

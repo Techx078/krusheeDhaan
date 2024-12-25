@@ -1,0 +1,110 @@
+<%- layout("/layouts/boierplate") %>  
+<body>
+
+    <div class="container mt-5 mb-5">
+      <div class="form-container bg-light p-5 rounded-lg shadow">
+        <h2 class="text-center mb-4">Crop Purchase Form</h2>
+        <form action="/payment/submit-crop-details" method="POST">
+          <div class="form-group">
+            <label for="crop-name">Crop Name</label>
+            <input type="text" id="crop-name" name="cropName" class="form-control" placeholder="Enter Crop Name" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="quantity">Quantity (in kg)</label>
+            <input type="number" id="quantity" name="quantity" class="form-control" placeholder="Enter Quantity" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="price">Price per kg (in ₹)</label>
+            <input type="number" id="price" name="price" class="form-control" placeholder="Enter Price per kg" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="purchase-date">Purchase Date</label>
+            <input type="date" id="purchase-date" name="purchaseDate" class="form-control" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="market">Market</label>
+            <select id="market" name="market" class="form-control" required>
+              <option value="">--Select Market--</option>
+              <option value="Ahmedabad">Ahmedabad</option>
+              <option value="Surat">Surat</option>
+              <option value="Vadodara">Vadodara</option>
+              <!-- Add more markets here as needed -->
+            </select>
+          </div>
+  
+          <div class="payment-method bg-white p-4 rounded-lg shadow mb-4">
+            <h4 class="mb-3">Another Payment Method</h4>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="radio" name="payment_method" id="cardPayment" />
+              <label class="form-check-label" for="cardPayment">
+                Credit or debit card
+              </label>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="radio" name="payment_method" id="netBanking" />
+              <label class="form-check-label" for="netBanking">
+                Net Banking
+              </label>
+              <select class="form-control mt-2">
+                <option>Choose an Option</option>
+                <!-- Add other options as needed -->
+              </select>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="radio" name="payment_method" id="upiApps" />
+              <label class="form-check-label" for="upiApps">
+                Other UPI Apps
+              </label>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" disabled type="radio" name="payment_method" id="emiUnavailable" />
+              <label class="form-check-label" for="emiUnavailable">
+                EMI Unavailable
+                <a href="#" class="text-primary">Why?</a>
+              </label>
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Option Box -->
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-4 text-center">
+          <div class="option">
+            <a href="tel:+1234567890" class="btn btn-info w-100">
+              <i class="fa-solid fa-phone"></i>
+              <p>Phone</p>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="option">
+            <a href="/payoption" class="btn btn-warning w-100">
+              <i class="fa-solid fa-credit-card"></i>
+              <p>Payment</p>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="option">
+            <button class="btn btn-success w-100">
+              <i class="fa-regular fa-handshake"></i>
+              <p>Zoom</p>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+   
+  </body>

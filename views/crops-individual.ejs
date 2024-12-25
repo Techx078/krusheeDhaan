@@ -1,0 +1,68 @@
+<%- layout("/layouts/boierplate") %> 
+<body>  
+   
+    <header>  
+        <h1>Indian Fresh Tomato Farmers</h1>  
+        <p>Your source for fresh, locally grown tomatoes!</p>  
+    </header> 
+    <div class="container">
+         
+    <% const farmers = [  
+        {  
+            image: "https://media.istockphoto.com/id/172925573/photo/red-tomatoes-still-on-the-vine.jpg?s=612x612&w=0&k=20&c=uljVOwI9ICETjf-bUHwDxP0sgb6e0hWRkmGcCJMei4E=",  
+            title: "Aarav Sharma",  
+            description: "Organic potatoes grown in the fields of Punjab.",  
+            price: "₹30/kg",  
+            phone: "98765-43210",  
+            location: "Amritsar, Punjab"  
+        },  
+        {  
+            image: "https://media.istockphoto.com/id/171579643/photo/tomato-greenhouse.jpg?s=612x612&w=0&k=20&c=BLtIrrBprkZlIHNfSYIhkm3aebVUjqxsS-Yoqa1ss08=",  
+            title: "Ramesh Kumar",  
+            description: "Fresh tomatoes from a family farm in Rajasthan.",  
+            price: "₹25/kg",  
+            phone: "98765-43213",  
+            location: "Ahmedabad, Gujarat"  
+        },  
+        {  
+            image: "https://media.istockphoto.com/id/172925573/photo/red-tomatoes-still-on-the-vine.jpg?s=612x612&w=0&k=20&c=uljVOwI9ICETjf-bUHwDxP0sgb6e0hWRkmGcCJMei4E=",  
+            title: "Kavya Nair",  
+            description: "Sweet corn harvested in Kerala.",  
+            price: "₹45/kg",  
+            phone: "99876-54324",  
+            location: "Kochi, Kerala"  
+        },  
+        {  
+            image: "https://media.istockphoto.com/id/172925573/photo/red-tomatoes-still-on-the-vine.jpg?s=612x612&w=0&k=20&c=uljVOwI9ICETjf-bUHwDxP0sgb6e0hWRkmGcCJMei4E=",  
+            title: "Aditi Tiwari",  
+            description: "Fresh garlic cultivated in Bihar.",  
+            price: "₹20/kg",  
+            phone: "98765-43214",  
+            location: "Patna, Bihar"  
+        },  
+        {  
+            image: "https://media.istockphoto.com/id/172925573/photo/red-tomatoes-still-on-the-vine.jpg?s=612x612&w=0&k=20&c=uljVOwI9ICETjf-bUHwDxP0sgb6e0hWRkmGcCJMei4E=",  
+            title: "Sarita Desai",  
+            description: "Organic peas grown in Maharashtra.",  
+            price: "₹32/kg",  
+            phone: "91234-56788",  
+            location: "Pune, Maharashtra"  
+        }  
+      ]; %>
+     <div class="crops-grid">  
+        <% farmers.forEach(function(farmer) { %>  
+            <a href="/profile" style="text-decoration: none;">
+                <div class="crop-card">  
+                    <img src="<%= farmer.image %>" alt="<%= farmer.title %>">  
+                    <h2><%= farmer.title %></h2>  
+                    <p><%= farmer.description %></p>  
+                    <p class="price">Price: <%= farmer.price %></p>  
+                    <p>Phone: <%= farmer.phone %></p>  
+                    <p>Location: <%= farmer.location %></p>  
+                </div>  
+            </a>
+        <% }); %>  
+    </div> 
+    </div>
+   
+    </body>
